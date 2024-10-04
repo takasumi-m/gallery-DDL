@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:8.0.35
+    container_name: gallery-cluster
+    env_file:
+      - ./config/.env
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./config/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./ddl/table:/docker-entrypoint-initdb.d/ddl
+      - ./dml:/docker-entrypoint-initdb.d/dml
+    networks:
+      - mysql-network
+
+volumes:
+  mysql_data:
+
+networks:
+  mysql-network:
